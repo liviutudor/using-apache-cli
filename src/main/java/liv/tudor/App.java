@@ -17,25 +17,24 @@ public class App {
     }
 
     public static void main(String[] args) {
-        if (args == null || args.length != 4) {
+        CmdLineParams params = null;
+        try {
+            params = new CmdLineParams(args);
+        }catch (Exception e) {
+            System.out.println( "Wrong parameters:" + e.getMessage());
             showHelp();
-            System.exit(1);
         }
-        String fileName = args[0];
-        String encoding = args[1];
-        String databaseHost = args[2];
-        String databaseName = args[3];
 
-        File f = new File(fileName);
+        File f = new File(params.getFileName());
         if (!f.exists()) {
-            System.out.println("File " + fileName + " not found");
+            System.out.println("File " + params.getFileName() + " not found");
             showHelp();
             System.exit((1));
         }
         try {
-            Charset.forName(encoding);
+            Charset.forName(params.getEncoding());
         } catch (IllegalCharsetNameException e) {
-            System.out.println("Invalid encoding : " + encoding);
+            System.out.println("Invalid encoding : " + params.getEncoding());
             showHelp();
             System.exit(1);
         }
