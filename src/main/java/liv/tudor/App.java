@@ -3,12 +3,51 @@
  */
 package liv.tudor;
 
+import java.io.File;
+import java.nio.charset.Charset;
+import java.nio.charset.IllegalCharsetNameException;
+
 public class App {
     public String getGreeting() {
         return "Hello world.";
     }
 
+    private static void showHelp() {
+        System.out.println("java App fileName encoding databaseHost databaseName");
+    }
+
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        if (args == null || args.length != 4) {
+            showHelp();
+            System.exit(1);
+        }
+        String fileName = args[0];
+        String encoding = args[1];
+        String databaseHost = args[2];
+        String databaseName = args[3];
+
+        File f = new File(fileName);
+        if (!f.exists()) {
+            System.out.println("File " + fileName + " not found");
+            showHelp();
+            System.exit((1));
+        }
+        try {
+            Charset.forName(encoding);
+        } catch (IllegalCharsetNameException e) {
+            System.out.println("Invalid encoding : " + encoding);
+            showHelp();
+            System.exit(1);
+        }
+
+        try {
+            //connect to database
+        } catch (Exception e) {
+            System.out.println("Cannot connect to database");
+            showHelp();
+            System.exit(1);
+        }
+
+        // finally do work
     }
 }
