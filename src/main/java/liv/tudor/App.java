@@ -20,32 +20,12 @@ public class App {
         CmdLineParams params = null;
         try {
             params = new CmdLineParams(args);
+            params.check();
         }catch (Exception e) {
             System.out.println( "Wrong parameters:" + e.getMessage());
             showHelp();
         }
 
-        File f = new File(params.getFileName());
-        if (!f.exists()) {
-            System.out.println("File " + params.getFileName() + " not found");
-            showHelp();
-            System.exit((1));
-        }
-        try {
-            Charset.forName(params.getEncoding());
-        } catch (IllegalCharsetNameException e) {
-            System.out.println("Invalid encoding : " + params.getEncoding());
-            showHelp();
-            System.exit(1);
-        }
-
-        try {
-            //connect to database
-        } catch (Exception e) {
-            System.out.println("Cannot connect to database");
-            showHelp();
-            System.exit(1);
-        }
 
         // finally do work
     }
