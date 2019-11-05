@@ -23,6 +23,8 @@ repositories {
 dependencies {
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:27.1-jre'
+    compile group: 'commons-cli', name: 'commons-cli', version: '1.4'
+
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'

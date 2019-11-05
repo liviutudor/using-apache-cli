@@ -1,43 +1,48 @@
 package liv.tudor;
 
-import java.util.StringJoiner;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 
 public class CmdLineParams {
-    private String fileName;
-    private String encoding;
-    private String databaseHost;
-    private String databaseName;
 
-    public CmdLineParams(String... args) {
-        this.fileName = args[0];
-        this.encoding = args[1];
-        this.databaseHost = args[2];
-        this.databaseName = args[3];
-    }
+  public static final String OPTION_FILE_SHORT = "f";
+  public static final Options OPTIONS = new Options();
 
-    public String getFileName() {
-        return fileName;
-    }
+  static {
+    Option file = new Option(OPTION_FILE_SHORT, "input-file_path", true, "Filename to import");
+    file.setRequired(true);
+    OPTIONS.addOption(file);
+    OPTIONS.addOption("enc", true, "Encoding of the import file");
+    OPTIONS.addOption("host", true, "DB host");
+    OPTIONS.addOption("db", true, "Database name");
+  }
 
-    public String getEncoding() {
-        return encoding;
-    }
 
-    public String getDatabaseHost() {
-        return databaseHost;
-    }
+  private CommandLine commandLine;
 
-    public String getDatabaseName() {
-        return databaseName;
-    }
+  public CmdLineParams(String... args) throws ParseException {
+    CommandLineParser parser = new DefaultParser();
+    commandLine = parser.parse(OPTIONS, args);
+  }
 
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", CmdLineParams.class.getSimpleName() + "[", "]")
-                .add("fileName='" + fileName + "'")
-                .add("encoding='" + encoding + "'")
-                .add("databaseHost='" + databaseHost + "'")
-                .add("databaseName='" + databaseName + "'")
-                .toString();
-    }
+  public String getFileName() {
+    return commandLine.getOptionValue(OPTION_FILE_SHORT);
+  }
+
+  public String getEncoding() {
+    return commandLine.getOptionValue("enc");
+  }
+
+  public String getDatabaseHost() {
+    return commandLine.getOptionValue("host");
+  }
+
+  public String getDatabaseName() {
+    return commandLine.getOptionValue("db");
+  }
+
 }

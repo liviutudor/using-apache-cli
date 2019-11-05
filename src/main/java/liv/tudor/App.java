@@ -6,31 +6,34 @@ package liv.tudor;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
+import org.apache.commons.cli.HelpFormatter;
 
 public class App {
-    public String getGreeting() {
-        return "Hello world.";
+
+  public String getGreeting() {
+    return "Hello world.";
+  }
+
+  private static void showHelp() {
+    HelpFormatter formatter = new HelpFormatter();
+    formatter.printHelp("import program", CmdLineParams.OPTIONS);
+  }
+
+  public static void main(String[] args) {
+    CmdLineParams params = null;
+    try {
+      params = new CmdLineParams(args);
+    } catch (Exception e) {
+      System.out.println("Wrong parameters:" + e.getMessage());
+      showHelp();
     }
 
-    private static void showHelp() {
-        System.out.println("java App fileName encoding databaseHost databaseName");
+    File f = new File(params.getFileName());
+    if (!f.exists()) {
+      System.out.println("File " + params.getFileName() + " not found");
+      showHelp();
+      System.exit((1));
     }
-
-    public static void main(String[] args) {
-        CmdLineParams params = null;
-        try {
-            params = new CmdLineParams(args);
-        }catch (Exception e) {
-            System.out.println( "Wrong parameters:" + e.getMessage());
-            showHelp();
-        }
-
-        File f = new File(params.getFileName());
-        if (!f.exists()) {
-            System.out.println("File " + params.getFileName() + " not found");
-            showHelp();
-            System.exit((1));
-        }
         try {
             Charset.forName(params.getEncoding());
         } catch (IllegalCharsetNameException e) {
@@ -39,14 +42,14 @@ public class App {
             System.exit(1);
         }
 
-        try {
-            //connect to database
-        } catch (Exception e) {
-            System.out.println("Cannot connect to database");
-            showHelp();
-            System.exit(1);
-        }
-
-        // finally do work
+    try {
+      //connect to database
+    } catch (Exception e) {
+      System.out.println("Cannot connect to database");
+      showHelp();
+      System.exit(1);
     }
+
+    // finally do work
+  }
 }
